@@ -1,3 +1,5 @@
+//CAMADA DE DOMÍNIO **
+
 package com.matheus.cusomc.domain;
 
 import java.io.Serializable;
