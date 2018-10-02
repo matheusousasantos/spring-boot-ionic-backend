@@ -23,8 +23,8 @@ public class CategoriaResource {
 	
 	//Método que retorna uma categoria através do ID passado no formato JSON pelo Postman
 	@RequestMapping(value="/{id}", method = RequestMethod.GET) //Verbos do HTTP
-	public ResponseEntity<?> find(@PathVariable Integer id) {
-		Categoria obj = service.buscar(id);
+	public ResponseEntity<Categoria> find(@PathVariable Integer id) {
+		Categoria obj = service.find(id);
 		return ResponseEntity.ok().body(obj);
 	}
 	
@@ -37,6 +37,11 @@ public class CategoriaResource {
 		return ResponseEntity.created(uri).build();
 	}
 	
-	
+	@RequestMapping(value="/{id}", method = RequestMethod.PUT)
+	public ResponseEntity<Void> updade(@RequestBody Categoria obj, @PathVariable Integer id){
+		obj.setId(id);
+		obj = service.update(obj);
+		return ResponseEntity.noContent().build();
+	}
 
 }
