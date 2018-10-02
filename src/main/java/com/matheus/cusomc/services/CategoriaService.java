@@ -3,10 +3,12 @@ package com.matheus.cusomc.services;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.matheus.cusomc.domain.Categoria;
 import com.matheus.cusomc.repositories.CategoriaRepository;
+import com.matheus.cusomc.services.exceptions.ConstraintViolationException;
 import com.matheus.cusomc.services.exceptions.ObjectNotFoundException;
 
 @Service
@@ -29,6 +31,15 @@ public class CategoriaService {
 	public Categoria update(Categoria obj) {
 		find(obj.getId()); /*Se o objeto não existir gera um erro!*/
 		return repo.save(obj);
+	}
+	
+	public void delete(Integer id) {
+		find(id);
+		try {
+		repo.deleteById(id);
+		}catch(DataIntegrityViolationException e) {
+			throw new ConstraintViolationException("Não é possivel excluir uma Categoria que possue produtos!!");	
+		}
 	}
 
 }
