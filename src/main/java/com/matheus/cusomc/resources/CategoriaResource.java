@@ -1,6 +1,8 @@
 package com.matheus.cusomc.resources;	
 
 import java.net.URI;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.matheus.cusomc.domain.Categoria;
+import com.matheus.cusomc.dto.CategoriaDTO;
 import com.matheus.cusomc.services.CategoriaService;
 
 @RestController
@@ -49,6 +52,14 @@ public class CategoriaResource {
 		service.delete(id);
 		return ResponseEntity.noContent().build();
 	}
+	
+	//Método que retorna uma categoria através do ID passado no formato JSON pelo Postman
+		@RequestMapping(method = RequestMethod.GET) //Verbos do HTTP
+		public ResponseEntity<List<CategoriaDTO>> findAll() {
+			List<Categoria>	 list = service.findAll();
+			List<CategoriaDTO> listDto = list.stream().map(obj -> new CategoriaDTO(obj)).collect(Collectors.toList());
+			return ResponseEntity.ok().body(listDto);
+		}
 	
 
 }

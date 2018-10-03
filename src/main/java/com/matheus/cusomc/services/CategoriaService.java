@@ -1,5 +1,6 @@
 package com.matheus.cusomc.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,10 @@ public class CategoriaService {
 		}catch(DataIntegrityViolationException e) {
 			throw new ConstraintViolationException("Não é possivel excluir uma Categoria que possue produtos!!");	
 		}
+	}
+	
+	public List<Categoria> findAll() { /* Uma operação que busca uma lista de categorias no repository*/
+		return repo.findAll();
 	}
 
 }
