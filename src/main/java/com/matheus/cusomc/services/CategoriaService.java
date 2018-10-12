@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.matheus.cusomc.domain.Categoria;
+import com.matheus.cusomc.dto.CategoriaDTO;
 import com.matheus.cusomc.repositories.CategoriaRepository;
 import com.matheus.cusomc.services.exceptions.ConstraintViolationException;
 import com.matheus.cusomc.services.exceptions.ObjectNotFoundException;
@@ -51,8 +52,16 @@ public class CategoriaService {
 	}
 	
 	public Page<Categoria> findPage(Integer page, Integer linesPerPage, String orderBy, String direction){
-		PageRequest request = PageRequest.of(page, linesPerPage, Direction.valueOf(direction),orderBy);
-		return repo.findAll(request);
+		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction),orderBy);
+		return repo.findAll(pageRequest);
+	}
+	
+	/* A partir de um DTO eu vou construir uma categoria passando seu id e nome.
+	 * Será o inverso feito no construtor da CategoriaDTO mais será necessário criar um método pois será usando 
+	   tanto no PUT com no POST.
+	 */
+	public Categoria fromDTO(CategoriaDTO objDTO) {
+		return new Categoria(objDTO.getId(), objDTO.getNome());
 	}
 
 }
