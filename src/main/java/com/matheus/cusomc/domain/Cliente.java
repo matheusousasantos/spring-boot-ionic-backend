@@ -52,7 +52,10 @@ public class Cliente implements Serializable{
 		this.nome = nome;
 		this.email = email;
 		this.cpfOuCnpj = cpfOuCnpj;
-		this.tipo = tipo.getCod();
+		//O tipo não pode ser nulo porque ele faz uma ação, por isso será preciso fazer uma condicional.
+		//Se o tipo for nulo eu vou atribuir nulo para esse campo.
+		//Caso contrário e atribuo o tipo existente.
+		this.tipo = (tipo==null) ? null : tipo.getCod(); //Operador ternário
 	}
 
 	public Integer getId() {
