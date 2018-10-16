@@ -89,6 +89,7 @@ public class ClienteService {
 				objDTO.getComplemento(), objDTO.getBairro(), objDTO.getCep(), cli, cid);
 		
 		cli.getEnderecos().add(end); // Adicionamos a uma lista de endereços referente ao cliente um endereço.
+		
 		cli.getTelefones().add(objDTO.getTelefone1()); /*Esse Telefone foi dito como obrigatótio
 		agora precisamos sabre o cliente informou outros telefones */
 		if(objDTO.getTelefone2() != null) {
