@@ -21,8 +21,8 @@ public enum TipoCliente {
 		return this.desc;
 	}
 	
-	public static TipoCliente toEnum(Integer id) {
-		
+	public static TipoCliente toEnum(Integer id) { 
+//  Basicamente retorna PESSOAFISICA(1) ou PESSOAJURIDICA(2) que será um TipoCliente	
 		if(id == null) {
 			return null;
 		}

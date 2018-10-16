@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.matheus.cusomc.domain.Categoria;
+import com.matheus.cusomc.domain.Cliente;
 import com.matheus.cusomc.dto.CategoriaDTO;
 import com.matheus.cusomc.repositories.CategoriaRepository;
 import com.matheus.cusomc.services.exceptions.ConstraintViolationException;
@@ -34,8 +35,9 @@ public class CategoriaService {
 	}
 	
 	public Categoria update(Categoria obj) {
-		find(obj.getId()); /*Se o objeto não existir gera um erro!*/
-		return repo.save(obj);
+		Categoria newObj = find(obj.getId());
+		updateData(newObj, obj);
+		return repo.save(newObj);
 	}
 	
 	public void delete(Integer id) {
@@ -62,6 +64,10 @@ public class CategoriaService {
 	 */
 	public Categoria fromDTO(CategoriaDTO objDTO) {
 		return new Categoria(objDTO.getId(), objDTO.getNome());
+	}
+	
+	private void updateData(Categoria newObj, Categoria obj) { //Interno da classe.
+		newObj.setNome(obj.getNome());	
 	}
 
 }

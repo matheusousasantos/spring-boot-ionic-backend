@@ -18,8 +18,8 @@ public class Estado implements Serializable{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	public Integer id;
-	public String nome;
+	private Integer id;
+	private String nome;
 	
 	@JsonIgnore
 	@OneToMany(mappedBy = "estado") // mappedBy - Define que esse é o outro lado da relação.
