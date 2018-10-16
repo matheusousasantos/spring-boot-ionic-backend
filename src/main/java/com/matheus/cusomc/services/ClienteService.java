@@ -10,10 +10,14 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
+import com.matheus.cusomc.domain.Cidade;
 import com.matheus.cusomc.domain.Cliente;
-import com.matheus.cusomc.domain.Cliente;
+import com.matheus.cusomc.domain.Endereco;
+import com.matheus.cusomc.domain.enums.TipoCliente;
 import com.matheus.cusomc.dto.ClienteDTO;
+import com.matheus.cusomc.dto.ClienteNewDTO;
 import com.matheus.cusomc.repositories.ClienteRepository;
+import com.matheus.cusomc.repositories.EnderecoRepository;
 import com.matheus.cusomc.services.exceptions.ConstraintViolationException;
 import com.matheus.cusomc.services.exceptions.ObjectNotFoundException;
 
@@ -23,11 +27,22 @@ public class ClienteService {
 	@Autowired
 	private ClienteRepository repo;	
 	
+	@Autowired
+	private EnderecoRepository enderecoRepository;	
+	
 	public Cliente find(Integer id) {
 		Optional<Cliente> obj = repo.findById(id);
 		return obj.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado! Id: "
 				+ id + ", Tipo " + Cliente.class.getName()));
 	}
+	
+	public Cliente insert(Cliente obj) {
+		obj.setId(null);
+		obj = repo.save(obj);
+		enderecoRepository.saveAll(obj.getEnderecos());
+		return obj;
+	}
+	
 	
 	public Cliente update(Cliente obj) {
 		Cliente newObj = find(obj.getId());
@@ -61,6 +76,30 @@ public class ClienteService {
 		newObj.setNome(obj.getNome());
 		newObj.setEmail(obj.getEmail());
 		
+	}
+	
+	public Cliente fromDTO(ClienteNewDTO objDTO) {
+		Cliente cli = new Cliente(null, objDTO.getNome(), objDTO.getEmail(), objDTO.
+				getCpfOuCnpj(), TipoCliente.toEnum(objDTO.getTipo()));
+		
+		Cidade cid = new Cidade();
+		cid.setId(objDTO.getCidadeId());
+		
+		Endereco end = new Endereco(null, objDTO.getLogradouro(), objDTO.getNumero(), 
+				objDTO.getComplemento(), objDTO.getBairro(), objDTO.getCep(), cli, cid);
+		
+		cli.getEnderecos().add(end); // Adicionamos a uma lista de endereços referente ao cliente um endereço.
+		cli.getTelefones().add(objDTO.getTelefone1()); /*Esse Telefone foi dito como obrigatótio
+		agora precisamos sabre o cliente informou outros telefones */
+		if(objDTO.getTelefone2() != null) {
+			cli.getTelefones().add(objDTO.getTelefone2());
+		}
+		
+		if(objDTO.getTelefone3() != null) {
+			cli.getTelefones().add(objDTO.getTelefone3());
+		}
+		
+		return cli;
 	}
 
 }
